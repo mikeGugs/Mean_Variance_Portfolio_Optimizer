@@ -107,14 +107,13 @@ ax.set_xticks(x_values_one)
 ax.set_xticklabels(all_history[stocks])
 ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 
-# create a graph showing the efficient frontier with 5000 random portfolios
 # Find the tangency portfolio
 ef.max_sharpe()
 ret_tangent, std_tangent, _ = ef.portfolio_performance()
 ax2=plt.subplot(1,2,2)
 plt.scatter(std_tangent, ret_tangent, marker="*", s=100, c="r", label="Max Sharpe")
 
-# Generate random portfolios and plot them
+# Generate 5000 randomly weighted portfolios and plot them
 n_samples = 5000
 w = np.random.dirichlet(np.ones(len(mu)), n_samples)
 rets = w.dot(mu)
