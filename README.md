@@ -1,7 +1,6 @@
 # Mean_Variance_Portfolio_Optimizer
 Mean-Variance Portfolio Optimizer Program
 
-Hi!
 This program is writtenin Python. It will create a portfolio for the stocks you decide to include, based on a mean-variance framework using 5 years of historical data from Tiingo. 
 It will show you 5 things:
 1) The maximum sharpe-ratio portfolio, the weights of the stocks in the portfolio, and it's expected risk & return.
@@ -16,6 +15,4 @@ numpy
 pyportfolioopt
 datetime
 
-You will also need a free API key from Tiingo.
-
-Hope you like it!
+You will need a free API key from Tiingo.
