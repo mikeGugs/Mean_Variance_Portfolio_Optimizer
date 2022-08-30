@@ -5,6 +5,7 @@ import numpy as np
 from pypfopt import EfficientFrontier, risk_models, expected_returns, plotting
 from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
 from datetime import date, timedelta
+import sys
 
 client = TiingoClient({'api_key': 'f267669a5603ccc70485209331f588a79359966a'})
 
@@ -25,10 +26,12 @@ class GetUserInput:
                           " Press return to add another one. Enter 'next' to "
                           "move on.\n")
             stock = stock.upper()
-            if stock == 'NEXT' or stock == '':
+            if stock == 'NEXT' or stock == '' or stock == 'Q':
                 still_entering = False
             else:
                 self.list_of_stocks.append(stock)
+            if stock == 'Q':
+                sys.exit()
 
     def include_dollar_value(self):
         """Find out if user wants to include dollar value. If yes, get the
@@ -143,9 +146,10 @@ class DoOptimization:
                   f"{leftover} \n")
 
 class MakePlots:
+    figure = plt.figure(figsize=(15, 5))
+
     @staticmethod
     def plot_efficient_frontier(efficient_frontier, statistics):
-        plt.figure(figsize=(10, 5))
         ax = plt.subplot(1, 2, 2)
         plotting.plot_efficient_frontier(efficient_frontier,
                                          ax=ax,
@@ -176,11 +180,9 @@ class MakePlots:
         ax1.xaxis.set_major_formatter(mtick.PercentFormatter(1))
         ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1, decimals=1))
         plt.tight_layout()
-        plt.show()
 
     @staticmethod
     def risk_vs_return_bar_graph(statistics):
-        plt.figure(figsize=(10, 5))
         """Creates a bar graph that will show the trade-off of risk vs
         return on each stock in the portfolio."""
         n = 1
@@ -194,7 +196,7 @@ class MakePlots:
 
         ax = plt.subplot(2,2,1)
         plt.bar(x_values_one,
-                statistics['expected_returns'],
+                statistics['expected_returns'] * 100,
                 color='green',
                 )
         plt.bar(x_values_two,
@@ -203,14 +205,16 @@ class MakePlots:
                 )
         plt.title('Expected Returns vs Volatility')
         plt.xlabel('Stocks')
-        plt.ylabel('Expected Return (annualized) vs Volatility (annualized '
-                   'sigma')
+        plt.ylabel('Return vs. Risk')
         plt.legend(['Expected Return', 'Volatility'])
         ax.set_xticks(x_values_one)
-        ax.set_xticklables(statistics['stocks'])
+        ax.set_xticklabels(statistics['stocks'])
         ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-        plt.show()
+        plt.tight_layout()
 
+    @staticmethod
+    def show_figure():
+        plt.show()
 
 if __name__ == '__main__':
     users_input = GetUserInput()
@@ -231,4 +235,5 @@ if __name__ == '__main__':
     plot = MakePlots()
     optimize.reset_efficient_frontier(data.statistics)
     plot.plot_efficient_frontier(optimize.efficient_frontier, data.statistics)
-    # MakePlots.risk_vs_return_bar_graph(data.statistics)
+    plot.risk_vs_return_bar_graph(data.statistics)
+    plot.show_figure()

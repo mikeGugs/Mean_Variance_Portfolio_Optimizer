@@ -99,57 +99,58 @@ ax1.xaxis.set_major_formatter(mtick.PercentFormatter(1))
 ax1.yaxis.set_major_formatter(mtick.PercentFormatter(1, decimals=1))
 plt.tight_layout()
 
-# # find the portfolio optimized for minimum volatility
-# print('These are the weights of the long-only, minimum volatility portfolio:')
-# min_vol = ef.min_volatility()
-# print(min_vol)
-# performance = ef.portfolio_performance(verbose=True)
-#
-# # Create side-by-side bar graph comparing volatility (annualized std dev.) vs avg annualized returns for each stock
-# n=1
-# t=2
-# d= number_of_stocks
-# w=.8
-# x_values_one = [t * element + w * n for element in range(d)]
-#
-# n=2
-# t=2
-# d= number_of_stocks
-# w=.8
-# x_values_two = [t * element + w * n for element in range(d)]
-#
-# ax = plt.subplot(1,2,1)
-# plt.bar(x_values_one, annual_exp_return_pct, color='green')
-# plt.bar(x_values_two, std_year_pct, color='red')
-# plt.title('Expected Return vs Volatility')
-# plt.xlabel('Stocks')
-# plt.ylabel('Expected Return (annualized) vs Volatility (annualized std dev')
-# plt.legend(['Expected Return', 'Volatility'])
-# ax.set_xticks(x_values_one)
-# ax.set_xticklabels(all_history[stocks])
-# ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-#
+# find the portfolio optimized for minimum volatility
+print('These are the weights of the long-only, minimum volatility portfolio:')
+ef = EfficientFrontier(mu, S, weight_bounds=(0,1))
+min_vol = ef.min_volatility()
+print(min_vol)
+performance = ef.portfolio_performance(verbose=True)
 
-#
-# # Print the previous day's closing prices
-# print("These are the previous day's closing prices:")
-# latest_prices = get_latest_prices(all_history)
-# print(latest_prices)
-#
-# # Find out if user wants to include a $ value of their portfolio to find exact amounts of stock to buy
-# yes_or_no = input('Do you want to give a dollar value of your portfolio to find the exact amounts of stock to buy? (Answer yes or no)')
-#
-# # Include portfolio value to come up with exact amount of stocks to buy
-# if yes_or_no == 'yes':
-#     dollar_value = int(input('What is the dollar value of your portfolio? (Leave out the dollar sign)'))
-#     discrete = DiscreteAllocation(cleaned_weights,
-#                                 latest_prices,
-#                                 total_portfolio_value=dollar_value,
-#                                 short_ratio=None)
-#     allocation, leftover = discrete.greedy_portfolio()
-#     print('You should buy the following amounts of shares: ', allocation)
-#     print('This is the amount of money you will have leftover: ${:.2f}'.format(leftover))
-#
-#
-# # Show the figure
+# Create side-by-side bar graph comparing volatility (annualized std dev.) vs avg annualized returns for each stock
+n=1
+t=2
+d= number_of_stocks
+w=.8
+x_values_one = [t * element + w * n for element in range(d)]
+
+n=2
+t=2
+d= number_of_stocks
+w=.8
+x_values_two = [t * element + w * n for element in range(d)]
+
+ax = plt.subplot(1,2,1)
+plt.bar(x_values_one, annual_exp_return_pct, color='green')
+plt.bar(x_values_two, std_year_pct, color='red')
+plt.title('Expected Return vs Volatility')
+plt.xlabel('Stocks')
+plt.ylabel('Expected Return (annualized) vs Volatility (annualized std dev')
+plt.legend(['Expected Return', 'Volatility'])
+ax.set_xticks(x_values_one)
+ax.set_xticklabels(all_history[stocks])
+ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+
+
+
+# Print the previous day's closing prices
+print("These are the previous day's closing prices:")
+latest_prices = get_latest_prices(all_history)
+print(latest_prices)
+
+# Find out if user wants to include a $ value of their portfolio to find exact amounts of stock to buy
+yes_or_no = input('Do you want to give a dollar value of your portfolio to find the exact amounts of stock to buy? (Answer yes or no)')
+
+# Include portfolio value to come up with exact amount of stocks to buy
+if yes_or_no == 'yes':
+    dollar_value = int(input('What is the dollar value of your portfolio? (Leave out the dollar sign)'))
+    discrete = DiscreteAllocation(cleaned_weights,
+                                latest_prices,
+                                total_portfolio_value=dollar_value,
+                                short_ratio=None)
+    allocation, leftover = discrete.greedy_portfolio()
+    print('You should buy the following amounts of shares: ', allocation)
+    print('This is the amount of money you will have leftover: ${:.2f}'.format(leftover))
+
+
+# Show the figure
 plt.show()
