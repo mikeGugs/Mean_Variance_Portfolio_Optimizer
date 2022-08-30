@@ -7,7 +7,7 @@ from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
 from datetime import date, timedelta
 import sys
 
-client = TiingoClient({'api_key': 'f267669a5603ccc70485209331f588a79359966a'})
+client = TiingoClient({'api_key': ''})
 
 class GetUserInput:
     """Gather list of stocks the user wants to include in the optimization,
