@@ -6,7 +6,7 @@ from pypfopt import EfficientFrontier, risk_models, expected_returns, plotting
 from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
 from datetime import date, timedelta
 
-client = TiingoClient({'api_key':''})
+client = TiingoClient({'api_key':'f267669a5603ccc70485209331f588a79359966a'})
 
 # Create an empty list to be populated by user input
 list_of_stocks = []

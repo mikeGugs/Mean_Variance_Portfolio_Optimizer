@@ -75,6 +75,8 @@ class GatherData:
         }
 
     def calculate_statistics(self, user_input):
+        """Calculate the statistics that are necessary for running a
+        portfolio optimizer."""
         self.statistics['daily_returns'] = self.stocks_history[
             user_input.list_of_stocks].pct_change()
         self.statistics['expected_returns'] = \
@@ -96,6 +98,8 @@ class DoOptimization:
         self.min_vol_port = ''
 
     def max_sharpe_long_only_portfolio(self, statistics):
+        """Find the weights, performance, and volatility of the max sharpe
+        portfolio, given the statistics previously calculated."""
         efficient_frontier = EfficientFrontier(statistics['expected_returns'],
                                                statistics['cov_matrix'],
                                                weight_bounds=(0, 1),
@@ -109,6 +113,8 @@ class DoOptimization:
         return self.max_sharpe_weights
 
     def min_variance_portfolio(self, statistics):
+        """Find the weights, performance, and volatility of the minimum
+        variance portfolio, given the statistics previously calculated."""
         print('These are the weights of the long-only, minimum volatility portfolio:')
         efficient_frontier = EfficientFrontier(statistics['expected_returns'],
                                                statistics['cov_matrix'],
@@ -131,6 +137,8 @@ class DoOptimization:
 
 
     def show_important_info(self, weights, stocks_history, user_input):
+        """Show additional info to the user that is helpful in building the
+        portfolio."""
         print("These are the previous days closing prices:")
         closing_prices = get_latest_prices(stocks_history)
         print(closing_prices)
@@ -140,16 +148,19 @@ class DoOptimization:
                                           total_portfolio_value=user_input,
                                           short_ratio=None)
             allocation, leftover = discrete.greedy_portfolio()
-            print('These are the portfolio weights in shares: \n',
+            print('\n These are the portfolio weights in shares: \n',
                   allocation)
             print(f"You'll have this much cash leftover as remainder: $"
                   f"{leftover} \n")
 
 class MakePlots:
+    """Make charts that are helpful for visualization of portfolio
+    statistics, and the outcome of the optimization."""
     figure = plt.figure(figsize=(15, 5))
 
     @staticmethod
     def plot_efficient_frontier(efficient_frontier, statistics):
+        """Make the plot of the efficient frontier."""
         ax = plt.subplot(1, 2, 2)
         plotting.plot_efficient_frontier(efficient_frontier,
                                          ax=ax,
@@ -214,6 +225,7 @@ class MakePlots:
 
     @staticmethod
     def show_figure():
+        """Show the graphs that are created."""
         plt.show()
 
 if __name__ == '__main__':
